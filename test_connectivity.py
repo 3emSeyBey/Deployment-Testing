@@ -16,8 +16,8 @@ def test_redis_connection():
 def test_mongo_connection():
     try:
         mongo_client = MongoClient('mongodb://localhost:27017/')
-        db = mongo_client['testdatabase']
-        collection = db['testcollection']
+        db = mongo_client['mydatabase']
+        collection = db['mycollection']
         collection.insert_one({"test_key": "test_value"})
         document = collection.find_one({"test_key": "test_value"})
         if document and document["test_key"] == "test_value":
