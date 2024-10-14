@@ -2,7 +2,6 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from redis import Redis
 from pymongo import MongoClient
-from pymilvus import connections, FieldSchema, CollectionSchema, DataType, Collection
 
 app = FastAPI()
 
@@ -14,20 +13,10 @@ mongo_client = MongoClient('mongodb://localhost:27017/')
 db = mongo_client['mydatabase']
 collection = db['mycollection']
 
-# Milvus setup
-connections.connect("default", host="localhost", port="19530")
-fields = [
-    FieldSchema(name="vector", dtype=DataType.FLOAT_VECTOR, dim=128),
-    FieldSchema(name="id", dtype=DataType.INT64, is_primary=True)
-]
-schema = CollectionSchema(fields, "collection description")
-milvus_collection = Collection("mycollection", schema)
-
 class Item(BaseModel):
     id: int
     name: str
     description: str
-    vector: list
 
 @app.post("/items/")
 async def create_item(item: Item):
@@ -35,8 +24,6 @@ async def create_item(item: Item):
     collection.insert_one(item.dict())
     # Cache in Redis
     redis_client.set(item.id, item.json())
-    # Insert vector into Milvus
-    milvus_collection.insert([[item.vector], [item.id]])
     return item
 
 @app.get("/items/{item_id}")
@@ -70,15 +57,6 @@ async def delete_item(item_id: int):
     # Delete from Redis
     redis_client.delete(item_id)
     return {"detail": "Item deleted"}
-
-@app.post("/search/")
-async def search_vectors(vector: list):
-    # Search in Milvus
-    search_param = {"metric_type": "L2", "params": {"nprobe": 10}}
-    results = milvus_collection.search([vector], "vector", search_param, limit=10)
-    if not results:
-        raise HTTPException(status_code=404, detail="No similar vectors found")
-    return results
 
 if __name__ == "__main__":
     import uvicorn
