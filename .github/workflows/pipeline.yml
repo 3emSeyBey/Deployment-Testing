@@ -1,0 +1,26 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Run this workflow when the `main` branch is updated
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code from GitHub
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up SSH agent and use the private SSH key to connect to the server
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
+
+      # Step 3: Deploy to the Droplet by running the deployment script
+      - name: Deploy to DigitalOcean Droplet
+        run: |
+          ssh root@159.89.85.6 'bash -s' < ./deploy.sh
