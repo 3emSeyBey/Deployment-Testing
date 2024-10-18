@@ -29,6 +29,6 @@ jobs:
       # Step 4: Deploy to DigitalOcean Droplet by running the deployment script
       - name: Deploy to DigitalOcean Droplet
         run: |
-          ssh root@159.89.85.6 'bash -s' < ./deploy.sh
+          ssh -o StrictHostKeyChecking=no root@159.89.85.6 'bash -s' < ./deploy.sh
         env:
           SSH_AUTH_SOCK: /tmp/ssh-agent.sock
