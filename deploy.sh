@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Navigate to the project directory
-cd /path/to/your/app
+cd /root/Deployment-Testing
 
 # Pull the latest changes from the main branch
 git pull origin main
