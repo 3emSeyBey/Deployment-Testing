@@ -17,9 +17,9 @@ jobs:
       # Step 2: Set up SSH agent and use the private SSH key to connect to the server
       - name: Set up SSH
         run: |
-          eval "$(ssh-agent -s)"
-          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
           mkdir -p ~/.ssh
+          echo "$DO_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
           # Add the host key for 159.89.85.6
           echo "|1|tplaESkv614rWM0MYQ/8D7qj42E=|K+DnlnSoo52fhIGnVPnXI5uOssU= ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDiRuSm3b1S8xyUgi0xrERx4EffgGrK75WxptpyqnKRx2jrNY/Ml9RA1LkhhjUoM/qACj3ADNKZMG96AACe28JTcnW7V5/Jzth0iSbjRPg9QOmgsoNtHUlH/dejtQeqAetVh4wKLP67UPLUVAuaNBZx6vyfUAWQqD9Ysz/STBeHnnqKEinbCOwY4ePjG1L/B7cMAseDl5on4ToqfA/GdLBe5Cefm8VBfI4IJONw2HkGiJc3sj/w03EaGGMZfik9Lbjl2jYJzLBHiQCvE3e9DHyWhCEjfWTdM6KveH9Q4kiw7/6q4wUw+Vdpk95Uj4xbzax7N6Z67RPIxjeUdewgMkDWvH2Ypq3hSLC8GrE8rvglk+t+9PSDPGkIxs+j+d38E/yRF/9EP8iYT5pGKaagfNdWYNbalhkmWfXXdbof2IiInn+cSDc+4MD8tKMmUFfFzPOqCLzOn0AJG66Y0nSgBy8igdmeISwN5pHrJOevjwAIooaaDq+A+BYKHrJq6NxFd/E=" >> ~/.ssh/known_hosts
           echo "|1|sWSr3yqrsaRuhnLPs4gXN1aF8CM=|QB2nk2++ZxIFHZImWoOerGz4Kxs= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBKtbYAw0q4dwTTO56F7X0MWomwsIbUOoTzhY0e4anz+5H3zyCRx87YOhzmlt+E+aCX5lmUFROzBt/z1ENgDMsSQ=" >> ~/.ssh/known_hosts
